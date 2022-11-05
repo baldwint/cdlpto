@@ -27,4 +27,4 @@ def build_gmail_link(target_day: dt.date):
             body=body,
         )
     )
-    return "https://mail.google.com/mail/?" + qs
+    return "https://mail.google.com/mail/u/1/?" + qs
