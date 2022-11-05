@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cdlpto"
+dependencies = [
+    "python-dateutil",
+    "click",
+    "PyPDF2",
+    "reportlab",
+]
+dynamic = ["version"]
+
+[project.scripts]
+cdlpto = "cdlpto.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+write_to = "src/cdlpto/_version.py"
+
+[tool.isort]
+profile = "black"
