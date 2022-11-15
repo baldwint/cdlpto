@@ -9,13 +9,15 @@ def build_gmail_link(target_day: dt.date):
     subject = f"PTO on {target_day.isoformat()}"
     body = textwrap.dedent(
         """\
-            {manager_name},
+            {config.manager_name},
 
             Requesting PTO on {target_day}.
 
-            Thank you!"""
+            Thank you!
+
+            {config.signature}"""
     ).format(
-        manager_name=config.manager_name,
+        config=config,
         target_day=target_day.strftime(config.date_format),
     )
     qs = urlencode(
