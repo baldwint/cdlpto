@@ -1,4 +1,5 @@
 import datetime as dt
+import subprocess
 import webbrowser
 
 import click
@@ -31,6 +32,7 @@ def main(date_string: str, comment: str, overwrite: bool):
         print(f"warning: {target_day.strftime(date_format)} is in the past")
     outpath = make_pdf(target_day, comment, overwrite=overwrite)
     print(f"Output written on {str(outpath)}.")
+    subprocess.run(["open", outpath])
 
     webbrowser.open_new(build_gmail_link(target_day))
     print(
