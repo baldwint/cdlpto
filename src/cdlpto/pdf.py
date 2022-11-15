@@ -27,12 +27,12 @@ checkboxes = {
 }
 
 
-def write_on_pdf(target_day: dt.date, comment: str = ""):
+def write_on_pdf(days: str, comment: str = ""):
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
     write(can, (120, 598), dt.date.today().strftime(config.date_format))
     write(can, (180, 568), config.employee_name)
-    write(can, (195, 540), target_day.strftime(config.date_format))
+    write(can, (195, 540), days)
     write(can, (140, 478), comment)
     write(can, checkboxes["pto"], "x")
 
@@ -50,13 +50,25 @@ def make_pdf(
     target_day: dt.date,
     comment: str = "",
     overwrite: bool = False,
+    n_days: int = 1,
 ) -> str:
+    if n_days < 1:
+        raise ValueError("take at least one whole day off!")
+    elif n_days == 1:
+        days = target_day.strftime(config.date_format)
+    else:
+        last_day = target_day + dt.timedelta(days=n_days - 1)
+        days = (
+            f"{n_days} days,"
+            f" from {target_day.strftime(config.date_format)}"
+            f" through {last_day.strftime(config.date_format)}"
+        )
 
     outdir = Path(config.output_dir)
     outpath = outdir / f"{target_day.isoformat()}-Time-Off-Request-Form.pdf"
     template_path = outdir / "Time-Off-Request-Form signed.pdf"
 
-    new_pdf = write_on_pdf(target_day, comment)
+    new_pdf = write_on_pdf(days, comment)
 
     # read your existing PDF
     with open(template_path, "rb") as fl:

@@ -23,14 +23,21 @@ from .pdf import make_pdf
     default=False,
     help="overwrite existing PDF file",
 )
+@click.option(
+    "-n",
+    "--n-days",
+    default=1,
+    type=int,
+    help="nuber of days to take off",
+)
 @click.argument("date_string")
-def main(date_string: str, comment: str, overwrite: bool):
+def main(date_string: str, comment: str, overwrite: bool, n_days: int):
     """Fill out the CDL PTO pdf form"""
     # parse date
     target_day = parse(date_string).date()
     if target_day < dt.date.today():
         print(f"warning: {target_day.strftime(date_format)} is in the past")
-    outpath = make_pdf(target_day, comment, overwrite=overwrite)
+    outpath = make_pdf(target_day, comment, overwrite=overwrite, n_days=n_days)
     print(f"Output written on {str(outpath)}.")
     subprocess.run(["open", outpath])
 
