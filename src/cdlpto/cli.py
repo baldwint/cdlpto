@@ -61,7 +61,7 @@ def main(
     print(f"Output written on {str(outpath)}.")
     subprocess.run(["open", outpath])
 
-    webbrowser.open_new(build_gmail_link(target_day))
+    webbrowser.open_new(build_gmail_link(target_day, leave_type))
     print(
         """Now you need to:
     - attach the pdf to the email

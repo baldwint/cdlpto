@@ -4,14 +4,22 @@ from urllib.parse import urlencode
 
 from . import config
 
+leave_types = {
+    "pto": "PTO",
+    "holiday": "floating holiday",
+    "sick": "sick leave",
+    "unpaid": "unpaid time off",
+}
 
-def build_gmail_link(target_day: dt.date):
-    subject = f"PTO on {target_day.isoformat()}"
+
+def build_gmail_link(target_day: dt.date, leave_type: str):
+    pto_type = leave_types[leave_type]
+    subject = f"{pto_type.capitalize()} on {target_day.isoformat()}"
     body = textwrap.dedent(
         """\
             {config.manager_name},
 
-            Requesting PTO on {target_day}.
+            Requesting {pto_type} on {target_day}.
 
             Thank you!
 
