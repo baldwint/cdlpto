@@ -1,6 +1,6 @@
 date_format = "%A, %d %B %Y"
 employee_name = "Tom Baldwin"
 output_dir = "/Volumes/data/Documents/cdl/pto/"
-manager_email = "greg.holiat@kinandcarta.com"
-manager_name = "Greg"
+manager_email = "stefanie.folk@kinandcarta.com"
+manager_name = "Stef"
 signature = "Tom Baldwin\nPrincipal\nKin + Carta Data Labs"
