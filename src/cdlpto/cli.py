@@ -28,16 +28,36 @@ from .pdf import make_pdf
     "--n-days",
     default=1,
     type=int,
-    help="nuber of days to take off",
+    help="Number of days to take off",
+)
+@click.option(
+    "-t",
+    "--type",
+    "leave_type",
+    default="pto",
+    type=click.Choice(["pto", "sick", "holiday", "unpaid"]),
+    help="What type of leave: regular PTO, sick leave, floating holiday, or unpaid",
 )
 @click.argument("date_string")
-def main(date_string: str, comment: str, overwrite: bool, n_days: int):
+def main(
+    date_string: str,
+    comment: str,
+    overwrite: bool,
+    n_days: int,
+    leave_type: str,
+):
     """Fill out the CDL PTO pdf form"""
     # parse date
     target_day = parse(date_string).date()
     if target_day < dt.date.today():
         print(f"warning: {target_day.strftime(date_format)} is in the past")
-    outpath = make_pdf(target_day, comment, overwrite=overwrite, n_days=n_days)
+    outpath = make_pdf(
+        target_day,
+        comment,
+        overwrite=overwrite,
+        n_days=n_days,
+        leave_type=leave_type,
+    )
     print(f"Output written on {str(outpath)}.")
     subprocess.run(["open", outpath])
 
