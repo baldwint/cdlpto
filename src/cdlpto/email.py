@@ -26,6 +26,7 @@ def build_gmail_link(target_day: dt.date, leave_type: str):
             {config.signature}"""
     ).format(
         config=config,
+        pto_type=pto_type,
         target_day=target_day.strftime(config.date_format),
     )
     qs = urlencode(
