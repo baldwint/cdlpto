@@ -14,7 +14,8 @@ leave_types = {
 
 def build_gmail_link(target_day: dt.date, leave_type: str):
     pto_type = leave_types[leave_type]
-    subject = f"{pto_type.capitalize()} on {target_day.isoformat()}"
+    pto_type_cap = pto_type if pto_type.isupper() else pto_type.capitalize()
+    subject = f"{pto_type_cap} on {target_day.isoformat()}"
     body = textwrap.dedent(
         """\
             {config.manager_name},
