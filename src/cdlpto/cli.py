@@ -53,6 +53,7 @@ def main(
     target_day = parse(date_string).date()
     if target_day < dt.date.today():
         print(f"warning: {target_day.strftime(date_format)} is in the past")
+        click.confirm("Proceed anyway?", abort=True)
     outpath = make_pdf(
         target_day,
         comment,
