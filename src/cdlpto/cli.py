@@ -27,6 +27,7 @@ from .pdf import make_pdf
     "-n",
     "--n-days",
     default=1,
+    show_default=True,
     type=int,
     help="Number of days to take off",
 )
@@ -35,6 +36,7 @@ from .pdf import make_pdf
     "--type",
     "leave_type",
     default="pto",
+    show_default=True,
     type=click.Choice(["pto", "sick", "holiday", "unpaid"]),
     help="What type of leave: regular PTO, sick leave, floating holiday, or unpaid",
 )
