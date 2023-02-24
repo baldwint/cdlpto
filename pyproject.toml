@@ -5,10 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cdlpto"
 dependencies = [
+    "appdirs",
     "python-dateutil",
     "click",
     "PyPDF2",
     "reportlab",
+    "tomli",
 ]
 dynamic = ["version"]
 

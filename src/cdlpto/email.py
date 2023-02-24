@@ -2,7 +2,7 @@ import datetime as dt
 import textwrap
 from urllib.parse import urlencode
 
-from . import config
+from .config import Config
 
 leave_types = {
     "pto": "PTO",
@@ -12,7 +12,7 @@ leave_types = {
 }
 
 
-def build_gmail_link(target_day: dt.date, leave_type: str):
+def build_gmail_link(config: Config, target_day: dt.date, leave_type: str):
     pto_type = leave_types[leave_type]
     pto_type_cap = pto_type if pto_type.isupper() else pto_type.capitalize()
     subject = f"{pto_type_cap} on {target_day.isoformat()}"

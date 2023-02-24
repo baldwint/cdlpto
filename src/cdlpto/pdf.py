@@ -9,7 +9,7 @@ from PyPDF2 import PdfFileReader, PdfFileWriter
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
-from . import config
+from .config import Config
 
 
 def write(can, xy, text):
@@ -28,6 +28,7 @@ checkboxes = {
 
 
 def write_on_pdf(
+    config: Config,
     days: str,
     comment: str = "",
     leave_type: str = "pto",
@@ -51,6 +52,8 @@ def write_on_pdf(
 
 
 def make_pdf(
+    config: Config,
+    template_path: Path,
     target_day: dt.date,
     comment: str = "",
     overwrite: bool = False,
@@ -76,9 +79,8 @@ def make_pdf(
 
     outdir = Path(config.output_dir)
     outpath = outdir / f"{target_day.isoformat()}-Time-Off-Request-Form.pdf"
-    template_path = outdir / "Time-Off-Request-Form signed.pdf"
 
-    new_pdf = write_on_pdf(days, comment, leave_type)
+    new_pdf = write_on_pdf(config, days, comment, leave_type)
 
     # read your existing PDF
     with open(template_path, "rb") as fl:
