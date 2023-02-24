@@ -12,6 +12,7 @@ class Config:
     manager_email: str
     manager_name: str
     signature: str
+    gmail_account_index: int = 0
 
 
 def load_config(location: Path) -> Config:
@@ -33,6 +34,7 @@ output_dir = "{output_dir}"
 manager_email = "manager.name@kinandcarta.com"
 manager_name = "Stef"
 signature = "{employee_name}\nJob Title\nKin + Carta Data Labs"
+gmail_account_index = 0
 """
     ).format(employee_name=employee_name, output_dir=output_dir)
     location.parent.mkdir(exist_ok=True, parents=True)

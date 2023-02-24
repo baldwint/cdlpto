@@ -50,4 +50,4 @@ def build_gmail_link(config: Config, pto: PTO):
             body=body,
         )
     )
-    return "https://mail.google.com/mail/u/1/?" + qs
+    return f"https://mail.google.com/mail/u/{config.gmail_account_index}/?" + qs
