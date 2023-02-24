@@ -1,8 +1,8 @@
-import datetime as dt
 import textwrap
 from urllib.parse import urlencode
 
 from .config import Config
+from .pto import PTO
 
 leave_types = {
     "pto": "PTO",
@@ -12,24 +12,35 @@ leave_types = {
 }
 
 
-def build_gmail_link(config: Config, target_day: dt.date, leave_type: str):
-    pto_type = leave_types[leave_type]
+def build_gmail_link(config: Config, pto: PTO):
+    pto_type = leave_types[pto.leave_type]
     pto_type_cap = pto_type if pto_type.isupper() else pto_type.capitalize()
-    subject = f"{pto_type_cap} on {target_day.isoformat()}"
+    if pto.n_days == 1:
+        subject = f"{pto_type_cap} on {pto.target_day.isoformat()}"
+        message = (
+            f"Requesting {pto_type}"
+            f" on {pto.target_day.strftime(config.date_format)}."
+        )
+    else:
+        subject = (
+            f"{pto_type_cap}"
+            f" from {pto.target_day.isoformat()} to {pto.last_day.isoformat()}"
+        )
+        message = (
+            f"Requesting {pto.n_days} days of {pto_type}"
+            f" from {pto.target_day.strftime(config.date_format)}"
+            f" to {pto.last_day.strftime(config.date_format)}."
+        )
     body = textwrap.dedent(
         """\
             {config.manager_name},
 
-            Requesting {pto_type} on {target_day}.
+            {message}
 
             Thank you!
 
             {config.signature}"""
-    ).format(
-        config=config,
-        pto_type=pto_type,
-        target_day=target_day.strftime(config.date_format),
-    )
+    ).format(config=config, message=message)
     qs = urlencode(
         dict(
             view="cm",

@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import datetime as dt
 import io
 from pathlib import Path
@@ -10,6 +7,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
 from .config import Config
+from .pto import PTO
 
 
 def write(can, xy, text):
@@ -29,17 +27,16 @@ checkboxes = {
 
 def write_on_pdf(
     config: Config,
+    pto: PTO,
     days: str,
-    comment: str = "",
-    leave_type: str = "pto",
 ):
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
     write(can, (120, 598), dt.date.today().strftime(config.date_format))
     write(can, (180, 568), config.employee_name)
     write(can, (195, 540), days)
-    write(can, (140, 478), comment)
-    write(can, checkboxes[leave_type], "x")
+    write(can, (140, 478), pto.comment)
+    write(can, checkboxes[pto.leave_type], "x")
 
     can.save()
 
@@ -53,34 +50,28 @@ def write_on_pdf(
 
 def make_pdf(
     config: Config,
+    pto: PTO,
     template_path: Path,
-    target_day: dt.date,
-    comment: str = "",
     overwrite: bool = False,
-    n_days: int = 1,
-    leave_type: str = "pto",
 ) -> str:
-    if n_days < 1:
-        raise ValueError("take at least one whole day off!")
-    elif n_days == 1:
-        days = target_day.strftime(config.date_format)
+    if pto.n_days == 1:
+        days = pto.target_day.strftime(config.date_format)
     else:
-        last_day = target_day + dt.timedelta(days=n_days - 1)
         days = (
-            f"{n_days} days,"
-            f" from {target_day.strftime(config.date_format)}"
-            f" through {last_day.strftime(config.date_format)}"
+            f"{pto.n_days} days,"
+            f" from {pto.target_day.strftime(config.date_format)}"
+            f" through {pto.last_day.strftime(config.date_format)}"
         )
 
-    if leave_type not in checkboxes:
+    if pto.leave_type not in checkboxes:
         raise ValueError(
-            f"What type of PTO is {leave_type}? Expected one of: {checkboxes.keys()}"
+            f"What type of PTO is {pto.leave_type}? Expected one of: {checkboxes.keys()}"
         )
 
     outdir = Path(config.output_dir)
-    outpath = outdir / f"{target_day.isoformat()}-Time-Off-Request-Form.pdf"
+    outpath = outdir / f"{pto.target_day.isoformat()}-Time-Off-Request-Form.pdf"
 
-    new_pdf = write_on_pdf(config, days, comment, leave_type)
+    new_pdf = write_on_pdf(config, pto, days)
 
     # read your existing PDF
     with open(template_path, "rb") as fl:

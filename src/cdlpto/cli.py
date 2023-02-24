@@ -12,6 +12,7 @@ from dateutil.parser import parse
 from . import config
 from .email import build_gmail_link
 from .pdf import make_pdf
+from .pto import PTO
 
 CONFIG_DIR = Path(user_config_dir("cdlpto", "baldwint"))
 CONFIG_LOC = CONFIG_DIR / "cdlpto.toml"
@@ -71,7 +72,7 @@ def find_pdf_template(config_dir: Path) -> Path:
     "--n-days",
     default=1,
     show_default=True,
-    type=int,
+    type=click.IntRange(min=1),
     help="Number of days to take off",
 )
 @click.option(
@@ -102,19 +103,27 @@ def main(
     if target_day < dt.date.today():
         print(f"warning: {target_day.strftime(cfg.date_format)} is in the past")
         click.confirm("Proceed anyway?", abort=True)
-    outpath = make_pdf(
-        config=cfg,
-        template_path=template_path,
+    pto = PTO(
         target_day=target_day,
-        comment=comment,
-        overwrite=overwrite,
         n_days=n_days,
         leave_type=leave_type,
+        comment=comment,
+    )
+    outpath = make_pdf(
+        config=cfg,
+        pto=pto,
+        template_path=template_path,
+        overwrite=overwrite,
     )
     print(f"Output written on {str(outpath)}.")
     subprocess.run(["open", outpath])
 
-    webbrowser.open_new(build_gmail_link(cfg, target_day, leave_type))
+    webbrowser.open_new(
+        build_gmail_link(
+            config=cfg,
+            pto=pto,
+        )
+    )
     print(
         """Now you need to:
     - attach the pdf to the email
