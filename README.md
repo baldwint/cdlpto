@@ -16,7 +16,7 @@ pip install --editable git+https://github.com/baldwint/cdlpto#egg=cdlpto
 
 ## Configuration
 
-On first run, a config file is put in `~/Library/Application Support/cdlpto`. This is where you configure your name, email signature, and the person you send the form to. You should also put a blank, *signed* copy of the PDF form in this folder for use as a template.
+On first run, a config file is put in `~/Library/Application Support/cdlpto`. This is where you configure your name, email signature, and the person you send the form to. You should also put a blank, *signed* copy of the [PDF form](https://drive.google.com/file/d/1FtK2zw4tXpKm31RZnl6Tmjk4VkCMO8uT/view?usp=sharing) in this folder for use as a template.
 
 ## Usage
 
