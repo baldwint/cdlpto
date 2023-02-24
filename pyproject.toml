@@ -4,6 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cdlpto"
+authors = [
+    {name = "Tom Baldwin", email = "tkb@sent.com"},
+]
+description = "Fill out the CDL PTO PDF form"
+readme = "README.md"
 dependencies = [
     "appdirs",
     "python-dateutil",
@@ -22,6 +27,7 @@ where = ["src"]
 
 [tool.setuptools_scm]
 write_to = "src/cdlpto/_version.py"
+version_scheme = "no-guess-dev"
 
 [tool.isort]
 profile = "black"
