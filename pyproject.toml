@@ -13,7 +13,7 @@ dependencies = [
     "appdirs",
     "python-dateutil",
     "click",
-    "PyPDF2",
+    "PyPDF2<3",
     "reportlab",
     "tomli",
 ]
