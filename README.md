@@ -10,6 +10,16 @@ After writing the PDF, the program will pop it open in Preview. It also opens an
 
 ## Installation
 
+Use [pipx](https://pypa.github.io/pipx/):
+
+```bash
+pipx install cdlpto
+```
+
+Plain old `pip` will work too.
+
+Or, if you want a development version, use:
+
 ```bash
 pip install --editable git+https://github.com/baldwint/cdlpto#egg=cdlpto
 ```
