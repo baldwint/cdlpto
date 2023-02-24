@@ -84,6 +84,14 @@ def find_pdf_template(config_dir: Path) -> Path:
     type=click.Choice(["pto", "sick", "holiday", "unpaid"]),
     help="What type of leave: regular PTO, sick leave, floating holiday, or unpaid",
 )
+@click.option(
+    "--draft-email/--no-draft-email",
+    "draft_email",
+    default=True,
+    show_default=True,
+    type=bool,
+    help="Whether to open a compose window in Gmail",
+)
 @click.argument("date_string")
 def main(
     date_string: str,
@@ -91,6 +99,7 @@ def main(
     overwrite: bool,
     n_days: int,
     leave_type: str,
+    draft_email: bool,
 ):
     """Fill out the CDL PTO pdf form"""
     if os.path.exists(CONFIG_LOC):
@@ -118,14 +127,10 @@ def main(
     print(f"Output written on {str(outpath)}.")
     subprocess.run(["open", outpath])
 
-    webbrowser.open_new(
-        build_gmail_link(
-            config=cfg,
-            pto=pto,
-        )
-    )
-    print(
-        """Now you need to:
+    if draft_email:
+        webbrowser.open_new(build_gmail_link(config=cfg, pto=pto))
+        print(
+            """Now you need to:
     - attach the pdf to the email
     - send the email
     - set an autoresponder in gmail
@@ -134,4 +139,4 @@ def main(
     - block your client calendar
     - set a slack status to away
     """
-    )
+        )
